@@ -1,73 +1,14 @@
 /*
- * Template name: Kertas - Responsive Bootstrap 3 Template
+ * Template name: Kertas - Responsive Bootstrap 3 Admin Template
  * Version: 1.0.0
  * Author: VergoLabs
  */
 
-/* PAGE NAVIGATION */
-function initNav() {
-	var scrollSpeed = 750;
-	var scrollOffset = 50;
-	var easing = 'swing';
-	
-	$('ul.nav').onePageNav({
-		currentClass: 'active',
-		changeHash: false,
-		scrollSpeed: scrollSpeed,
-		scrollOffset: scrollOffset,
-		scrollThreshold: 0.5,
-		filter: ':not(.external)',
-		easing: easing
-	});
-	
-	$('.nav-external').click(function (e) {
-		e.preventDefault();
-		$('html, body').stop().animate({
-			scrollTop: $($(this).attr("href")).offset().top - scrollOffset
-		}, scrollSpeed, easing);
-	});
-}
-
-/* SORTING PORTFOLIO */
-function initPortfolio() {
-	var portfolio = $('#gallery');
-	var items = $('.items', portfolio);
-	var filters = $('.filters li a', portfolio);
-	
-	items.isotope({
-		itemSelector: '.item',
-		layoutMode: 'fitRows',
-		transitionDuration: '0.7s'
-	});
-	
-	filters.click(function(){
-		var el = $(this);
-		filters.removeClass('active');
-		el.addClass('active');
-		var selector = el.attr('data-filter');
-		items.isotope({ filter: selector });
-		return false;
-	});
-}
-
-/* POPUP GALLERY */
-function initPopup() {
-	$('.popup-gallery').magnificPopup({
-		delegate: 'a',
-		type: 'image',
-		tLoading: 'Loading image #%curr%...',
-		mainClass: 'mfp-img-mobile',
-		gallery: {
-			enabled: true,
-			navigateByImgClick: true,
-			preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-		},
-		image: {
-			tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-			titleSrc: function(item) {
-				return item.el.attr('title') + '<small>by Ryan McGuire</small>';
-			}
-		}
+/* NEWS TICKER */
+function initNews() {
+	$('.ticker').totemticker({
+		row_height	:	'60px',
+		mousestop	:	false
 	});
 }
 
@@ -89,30 +30,138 @@ function initScrollTop() {
 	});
 }
 
-/* GOOGLE MAP */
-function initMap() {
-	function initialize() {
-		var map_canvas = document.getElementById('map_canvas');
-		var map_options = {
-			scrollwheel: false,
-			navigationControl: false,
-			mapTypeControl: false,
-			scaleControl: false,
-			center: new google.maps.LatLng(44.5403, -78.5463),
-			zoom: 8,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+/* SIDEBAR TOGGLE */
+function initSidebar() {
+	$("[data-toggle='offcanvas']").click(function(e) {
+		e.preventDefault();
+		if ($(window).width() <= 992) {
+			$('.row-offcanvas').toggleClass('active');
+			$('.row-offcanvas').toggleClass('relative');
+			$('.left-side').removeClass("collapse-left");
+			$('.right-side').removeClass('strech');
+		} else {
+			$('.left-side').toggleClass("collapse-left");
+			$('.right-side').toggleClass('strech');
 		}
-		var map = new google.maps.Map(map_canvas, map_options)
+	});
+	
+	/* SIDEBAR FIX WHEN RESIZED */
+	function _fix() {
+		var height = $(window).height() - $("body > .header").height();
+		$(".wrapper").css("min-height", height + "px");
+		var content = $(".wrapper").height();
+		if (content > height)
+			$(".left-side, html, body").css("min-height", content + "px");
+		else {
+			$(".left-side, html, body").css("min-height", height + "px");
+		}
 	}
-	google.maps.event.addDomListener(window, 'load', initialize);
+	
+	_fix();
+	
+	$(".wrapper").resize(function() {
+		_fix();
+	});
+	
+	/* SIDEBAR MENU */
+	$.fn.tree = function() {
+		return this.each(function() {
+			var btn = $(this).children("a").first();
+			var menu = $(this).children(".sub-menu").first();
+			var isActive = $(this).hasClass('active');
+			if (isActive) {
+				menu.show();
+				btn.children(".fa-angle-left").first().removeClass("fa-angle-left").addClass("fa-angle-down");
+			}
+			btn.click(function(e) {
+				e.preventDefault();
+				btn.parent("li").siblings().children(".sub-menu").slideUp();
+				btn.parent("li").siblings().children("a").children(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-left");
+				btn.parent("li").siblings().removeClass("active");
+				
+				if(btn.parent("li").hasClass("active")) {
+					menu.slideUp();
+					btn.children(".fa-angle-down").first().removeClass("fa-angle-down").addClass("fa-angle-left");
+					btn.parent("li").removeClass("active");
+				}else{
+					menu.slideDown();
+					btn.children(".fa-angle-left").first().removeClass("fa-angle-left").addClass("fa-angle-down");
+					btn.parent("li").addClass("active");
+				}
+			});
+			menu.find("li > a").each(function() {
+				var pad = parseInt($(this).css("margin-left")) + 10;
+				$(this).css({"margin-left": pad + "px"});
+			});
+		});
+	};
+	
+	$(".sidebar .menu").tree();
+}
+
+/* GRID */
+function initGrid() {
+	/* COLLAPSE */
+	$("[data-widget='collapse']").click(function() {
+		var grid = $(this).parents(".grid").first();
+		var grid_body = grid.find(".grid-body");
+		if(!grid.hasClass("collapsed-grid")) {
+			$(this).children(".fa-chevron-up").first().removeClass("fa-chevron-up").addClass("fa-chevron-down");
+			grid.addClass("collapsed-grid");
+			grid_body.slideUp(200);
+		} else {
+			$(this).children(".fa-chevron-down").first().removeClass("fa-chevron-down").addClass("fa-chevron-up");
+			grid.removeClass("collapsed-grid");
+			grid_body.slideDown(200);
+		}
+	});
+	
+	/* RELOAD GRID */
+	$("[data-widget='reload']").click(function() {
+		var grid = $(this).parents(".grid").first();
+		blockUI(grid);
+		window.setTimeout(function() {
+			unblockUI(grid);
+		}, 1000);
+	});
+	
+	function blockUI(grid) {
+		$(grid).block({
+			message: '<div class="loading"></div>',
+			css: {
+				border: 'none',
+				padding: '2px',
+				backgroundColor: 'none'
+			},
+			overlayCSS: {
+				backgroundColor: '#fff',
+				opacity: 0.5,
+				cursor: 'wait'
+			}
+		});
+	}
+	
+	function unblockUI(grid) {
+		$(grid).unblock();
+	}
+	
+	/* REMOVE GRID */
+	$("[data-widget='remove']").click(function() {
+		var grid = $(this).parents(".grid").first();
+		grid.fadeOut();
+	});
 }
 
 $(function() {
 	"use strict";
 	
-	initNav();
-	initPortfolio();
-	initPopup();
+	/* POPOVER & TOOLTIP */
+	$("[data-toggle='popover']").popover();
+	$("[data-toggle='tooltip']").tooltip();
+	$("[data-toggle='file-close']").click(function(){ $(this).parent('li').hide(); });
+	
+	initNews();
 	initScrollTop();
-	initMap();
+	initSidebar();
+	initGrid();	
 });
