@@ -267,7 +267,7 @@ table .text-center th {
 
 /* SCROLL TO TOP */
 .scroll-to-top {
-	background: url(../../../html/assets/img/scroll-to-top.png) no-repeat;
+	background: url(assets/img/scroll-to-top.png) no-repeat;
 	position: fixed;
 	cursor: pointer;
 	bottom: 24px;
