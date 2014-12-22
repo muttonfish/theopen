@@ -69,21 +69,20 @@
   <!-- END BOTTOM-FOOTER -->
   
   <div class="scroll-to-top"></div>
-
   <!-- BEGIN JS FRAMEWORK -->
-  <script src="/assets/plugins/jquery-2.1.0.min.js"></script>
-  <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script src="{{ "/assets/plugins/jquery-2.1.0.min.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/plugins/bootstrap/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
   <!-- END JS FRAMEWORK -->
   
   <!-- BEGIN JS PLUGIN -->
-  <script src="/assets/plugins/pace/pace.min.js"></script>
-  <script src="/assets/plugins/jquery-magnific-popup/jquery.magnific-popup.min.js"></script>
-  <script src="/assets/js/jquery.nav.js"></script>
-  <script src="/assets/js/isotope.pkgd.min.js"></script>
+  <script src="{{ "/assets/plugins/pace/pace.min.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/plugins/jquery-magnific-popup/jquery.magnific-popup.min.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/js/jquery.nav.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/js/isotope.pkgd.min.js" | prepend: site.baseurl }}"></script>
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <!-- END JS PLUGIN -->
 
   <!-- BEGIN JS TEMPLATE -->
-  <script src="/assets/js/main.js"></script>
+  <script src="{{ "/assets/js/main.js" | prepend: site.baseurl }}"></script>
   <!-- END JS TEMPLATE -->
 </footer>
