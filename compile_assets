@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Open's Asset Compilation"
+
+lessc assets/css/style.less assets/css/style.css
+
+echo "Done!"
